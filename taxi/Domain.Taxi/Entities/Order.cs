@@ -2,14 +2,9 @@
 using Domain.Taxi.Enums;
 using Domain.Taxi.Exceptions;
 using Domain.ValueObjects;
-using System.Net;
-using System.Xml.Linq;
 
 namespace Domain.Taxi.Entities;
 
-/// <summary>
-/// Represents a ride order.
-/// </summary>
 public class Order : Entity<Guid>
 {
     private readonly List<Feedback> _feedbacks = new();
@@ -41,15 +36,12 @@ public class Order : Entity<Guid>
 
         Status = OrderStatus.Searching;
         CreatedAt = DateTime.UtcNow;
-        Price = 0; // Will be calculated when completed
+        Price = 0;
     }
 
     public Order(Passenger passenger, Tariff tariff, Address startAddress, Address endAddress)
         : this(Guid.NewGuid(), passenger, tariff, startAddress, endAddress) { }
 
-    /// <summary>
-    /// Assigns a driver to this order.
-    /// </summary>
     internal void AssignDriver(Driver driver)
     {
         if (driver == null) throw new ArgumentNullValueException(nameof(driver));
@@ -62,9 +54,6 @@ public class Order : Entity<Guid>
         Status = OrderStatus.InProgress;
     }
 
-    /// <summary>
-    /// Completes the order and calculates price.
-    /// </summary>
     internal void Complete()
     {
         if (Status != OrderStatus.InProgress)
@@ -74,14 +63,8 @@ public class Order : Entity<Guid>
 
         Status = OrderStatus.Completed;
         CompletedAt = DateTime.UtcNow;
-
-        // Здесь можно добавить логику расчёта цены
-        // Price = CalculatePrice();
     }
 
-    /// <summary>
-    /// Cancels the order.
-    /// </summary>
     public void Cancel()
     {
         if (Status == OrderStatus.Completed)
@@ -90,9 +73,6 @@ public class Order : Entity<Guid>
         Status = OrderStatus.Cancelled;
     }
 
-    /// <summary>
-    /// Adds feedback for this order.
-    /// </summary>
     public Feedback AddFeedback(Passenger from, Driver to, int score, Comment comment)
     {
         if (from == null) throw new ArgumentNullValueException(nameof(from));
@@ -101,16 +81,11 @@ public class Order : Entity<Guid>
 
         var feedback = new Feedback(this, from, to, score, comment);
         _feedbacks.Add(feedback);
-
-        // Обновляем рейтинг получателя (водителя)
         to.AddFeedback(feedback);
 
         return feedback;
     }
 
-    /// <summary>
-    /// Adds feedback from driver to passenger.
-    /// </summary>
     public Feedback AddFeedback(Driver from, Passenger to, int score, Comment comment)
     {
         if (from == null) throw new ArgumentNullValueException(nameof(from));
@@ -119,8 +94,6 @@ public class Order : Entity<Guid>
 
         var feedback = new Feedback(this, from, to, score, comment);
         _feedbacks.Add(feedback);
-
-        // Обновляем рейтинг получателя (пассажира)
         to.AddFeedback(feedback);
 
         return feedback;

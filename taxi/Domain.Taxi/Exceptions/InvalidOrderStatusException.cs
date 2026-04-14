@@ -1,9 +1,19 @@
-﻿namespace Domain.Taxi.Exceptions;
+﻿using Domain.Taxi.Entities;
+using Domain.Taxi.Enums;
 
-public class InvalidOrderStatusException(Order order, OrderStatus expectedStatus, OrderStatus actualStatus)
-    : InvalidOperationException($"Order {order.Id} has status {actualStatus}, but expected {expectedStatus}")
+namespace Domain.Taxi.Exceptions;
+
+public class InvalidOrderStatusException : InvalidOperationException
 {
-    public Order Order => order;
-    public OrderStatus ExpectedStatus => expectedStatus;
-    public OrderStatus ActualStatus => actualStatus;
+    public Order Order { get; }
+    public OrderStatus ExpectedStatus { get; }
+    public OrderStatus ActualStatus { get; }
+
+    public InvalidOrderStatusException(Order order, OrderStatus expectedStatus, OrderStatus actualStatus)
+        : base($"Order {order.Id} has status {actualStatus}, but expected {expectedStatus}")
+    {
+        Order = order;
+        ExpectedStatus = expectedStatus;
+        ActualStatus = actualStatus;
+    }
 }

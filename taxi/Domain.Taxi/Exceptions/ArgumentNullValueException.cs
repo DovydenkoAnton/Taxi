@@ -1,4 +1,9 @@
 ﻿namespace Domain.Taxi.Exceptions;
 
-public class ArgumentNullValueException(string paramName)
-    : ArgumentNullException(paramName, $"Argument \"{paramName}\" value is null");
+public class ArgumentNullValueException : ArgumentNullException
+{
+    public ArgumentNullValueException(string paramName)
+        : base(paramName, $"Argument \"{paramName}\" value is null")
+    {
+    }
+}

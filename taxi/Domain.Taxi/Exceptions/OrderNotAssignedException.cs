@@ -2,8 +2,13 @@
 
 namespace Domain.Taxi.Exceptions;
 
-public class OrderNotAssignedException(Order order)
-    : InvalidOperationException($"Order {order.Id} has no assigned driver")
+public class OrderNotAssignedException : InvalidOperationException
 {
-    public Order Order => order;
+    public Order Order { get; }
+
+    public OrderNotAssignedException(Order order)
+        : base($"Order {order.Id} has no assigned driver")
+    {
+        Order = order;
+    }
 }
