@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Domain.Taxi/Domain.Taxi.csproj" Id="d63d89a5-caec-432f-bd59-1c418f3943b8" />
+  <Project Path="Domain.ValueObjects/Domain.ValueObjects.csproj" />
+  <Project Path="DomainApp/DomainApp.csproj" Id="c7e23c84-961f-46f0-a54d-cf0b94708ef1" />
+</Solution>
